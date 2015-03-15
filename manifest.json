@@ -1,0 +1,39 @@
+{
+  "name": "Bookmark Pro for Chrome",
+  "version": "1.0",
+  "description": "Save native bookmarks in Chrome faster.",
+  "permissions": [
+    "bookmarks",
+    "activeTab",
+    "<all_urls>"
+  ],
+  "browser_action": {
+      "default_title": "Bookmark Pro for Chrome",
+      "default_icon": "icon.png",
+      "default_popup": "popup.html"
+  },
+  // "icons": { "16": "icon16.png",
+  //          "48": "icon48.png",
+  //         "128": "icon128.png"
+  // },
+  "commands": {
+    "_execute_browser_action": {
+      "suggested_key": {
+        "windows": "Ctrl+Shift+Y",
+        "mac": "Command+D",
+        "chromeos": "Ctrl+Shift+U",
+        "linux": "Ctrl+Shift+J"
+      }
+    }
+  },
+  "manifest_version": 2,
+  "content_security_policy": "script-src 'self' https://ajax.googleapis.com https://cdnjs.cloudflare.com; object-src 'self'",
+  "content_scripts": [
+   {
+     "matches": ["<all_urls>"],
+     "js": ["js/selection.js"],
+     "run_at": "document_start",
+     "all_frames": true
+   }
+ ]
+}
