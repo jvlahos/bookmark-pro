@@ -1,9 +1,9 @@
+
+
 function init() {
-  getBookmarks();
   getTabInfo();
+  getBookmarks();
 }
-
-
 
 var tabTitle, tabUrl, favIconUrl;
 
@@ -39,8 +39,21 @@ function getTabInfo() {
     var folderId = $(".js-select-folder").select2("val");
     tabTitle = $('.js-input-title').val();
     tabUrl = $('.js-input-url').val();
-    chrome.bookmarks.create({'parentId': folderId, 'title': tabTitle, 'url': tabUrl });
+    if (updateOnSave == false) {
+      chrome.bookmarks.create({'parentId': folderId, 'title': tabTitle, 'url': tabUrl });
+    } else if (updateOnSave == true) {
+      //Only title and url are supported for update function, so we'll delete then create
+      chrome.bookmarks.remove(activeBookmark.id, function(){
+        chrome.bookmarks.create({'parentId': folderId, 'title': tabTitle, 'url': tabUrl });
+      });
+    }
     window.close();
+  });
+
+  $('.js-delete-btn').on('click', function(){
+    chrome.bookmarks.remove(activeBookmark.id, function(){
+      window.close();
+    });
   });
 
   $(window).keydown(function (e){
@@ -72,6 +85,9 @@ function getTabInfo() {
   });
 
 }
+
+var updateOnSave = false;
+var activeBookmark = false;
 
 function getBookmarks(){
 
@@ -121,6 +137,8 @@ function getBookmarks(){
 
         for (i = 0; i < bookmarkItems.length; i++ ) {
           var item = bookmarkItems[i];
+
+          //If item has children, process it as a folder
           if (item.children) {
             var parent = item;
             var option = $('<option>');
@@ -147,10 +165,16 @@ function getBookmarks(){
                   dOption.attr('selected', 'selected');
                 }
                 dOptGroup.append(dOption);
+              } else if ( child.url == tabUrl ) {
+                activeBookmark = child;
+                updateOnSave = true;
+                $('.save-btn').val('Update');
+                $('.popup-body').addClass('is-update-mode');
               }
             }
             $('.js-select-folder').append(dOptGroup);
-          } //eo if (item.children)
+
+          }
         } //eo for loop bookmarkItems
 
         $('.js-select-folder').prepend(optGroup);
@@ -164,14 +188,17 @@ function getBookmarks(){
           })
           .on("select2:close", function () {
            $('html, body').css('height', '190px');
-          })
-          .on("select2:focus", function () {
-           console.log('focus');
-          })
+          });
+
+        if (activeBookmark !== false) {
+          $('.js-input-title').val(activeBookmark.title);
+          $('.js-select-folder').select2('val', activeBookmark.parentId);
+        }
     });
   }
 
-}
+}//eo getBookmarks()
+
 
 function isInArray(value, array) {
   return array.indexOf(value) > -1;
