@@ -10,20 +10,20 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-rc.1/js/select2.min.js"></script>
   <script src="js/popup.js"></script>
 </head>
-<body>
+<body class="popup-body">
   <div class="input-group is-focused">
     <div class="input-icon icon-title">Aa</div>
-    <input id="input-title" type="input-title" type="text" value=""/>
+    <input class="js-input-title input-title" type="text" value=""/>
   </div>
   <div class="input-group">
     <div class="input-icon icon-link"></div>
-    <input id="input-url" type="text" value=""/>
+    <input class="js-input-url input-url" type="text" value=""/>
   </div>
   <div class="input-group select2-group">
     <div class="input-icon icon-folder"></div>
-    <select id="select-folder"></select>
+    <select class="js-select-folder"></select>
   </div>
-  <div id="recent-folders"></div>
-  <input id="saveBookmark" type="submit" value="Save"/>
+  <div class="recent-folders js-recent-folders"></div>
+  <input class="save-btn js-save-btn" type="submit" value="Save"/>
 </body>
 </html>

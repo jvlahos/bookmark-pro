@@ -5,7 +5,7 @@ function init() {
 
 
 
-var tabTitle, tabUrl;
+var tabTitle, tabUrl, favIconUrl;
 
 function getTabInfo() {
 
@@ -17,23 +17,28 @@ function getTabInfo() {
         if (response) {
           var selectedText = response.data;
         }
+        favIconUrl = tab[0].favIconUrl;
+        if (favIconUrl !== undefined) {
+          $('.icon-title').text('').css('background-image', 'url('+favIconUrl+')');
+        }
         tabUrl = tab[0].url;
         tabTitle = tab[0].title;
-        $('#input-url').val(tabUrl);
+
+        $('.js-input-url').val(tabUrl);
         if (selectedText) {
-          $('#input-title').val('"'+ selectedText +'" - ' + tabTitle);
+          $('.js-input-title').val('"'+ selectedText +'" - ' + tabTitle);
         } else {
-          $('#input-title').val(tabTitle);
+          $('.js-input-title').val(tabTitle);
         }
       });
   });
 
   //Bind save event
   //This should use an updated tabTitle and tabUrl value
-  $('#saveBookmark').on('click', function(){
-    var folderId = $("#select-folder").select2("val");
-    tabTitle = $('#input-title').val();
-    tabUrl = $('#input-url').val();
+  $('.js-save-btn').on('click', function(){
+    var folderId = $(".js-select-folder").select2("val");
+    tabTitle = $('.js-input-title').val();
+    tabUrl = $('.js-input-url').val();
     chrome.bookmarks.create({'parentId': folderId, 'title': tabTitle, 'url': tabUrl });
     window.close();
   });
@@ -43,21 +48,20 @@ function getTabInfo() {
         if ($('.select2-container--focus').length > 0) {
           return;
         } else {
-          $('#saveBookmark').trigger('click');
+          $('.js-save-btn').trigger('click');
         }
       } else if (e.keyCode == 27) {
         window.close();
       } else if (e.keyCode == 9) {
         setTimeout(function(e){
           if ($('.select2-container--focus').length > 0) {
-            $('#select-folder').select2('open');
+            $('.js-select-folder').select2('open');
           }
         },1 );
       }
   })
 
   $(document).on('focus', 'input, select', function(e){
-    console.log('focus change');
     $('.is-focused').removeClass('is-focused');
     if ($(this).closest('.input-group').length > 0) {
       $(this).closest('.input-group').addClass('is-focused');
@@ -83,10 +87,10 @@ function getBookmarks(){
           recentParents[recentParents.length] = parseInt(bookmarks[i].parentId);
           if (i > 0) {
             chrome.bookmarks.get(bookmarks[i].parentId, function(parent){
-              var button = $('<button class="js-use-this-folder">');
+              var button = $('<button class="js-use-this-folder recent-folder-btn">');
               button.attr('data-id', parseInt(parent[0].id));
               button.text(parent[0].title);
-              $('#recent-folders').append(button);
+              $('.js-recent-folders').append(button);
             });
           }
         }
@@ -94,7 +98,7 @@ function getBookmarks(){
     }
     $(document).on('click', '.js-use-this-folder', function(e){
       e.preventDefault();
-      $("#select-folder").select2("val", $(this).data('id'));
+      $('.js-select-folder').select2("val", $(this).data('id'));
     });
   });
 
@@ -145,13 +149,13 @@ function getBookmarks(){
                 dOptGroup.append(dOption);
               }
             }
-            $('#select-folder').append(dOptGroup);
-          }
-        }
+            $('.js-select-folder').append(dOptGroup);
+          } //eo if (item.children)
+        } //eo for loop bookmarkItems
 
-        $('#select-folder').prepend(optGroup);
+        $('.js-select-folder').prepend(optGroup);
 
-        $('#select-folder').select2({
+        $('.js-select-folder').select2({
           escapeMarkup: function (text) { return text; }
           })
           .on("select2:open", function () {
