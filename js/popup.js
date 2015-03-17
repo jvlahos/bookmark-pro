@@ -165,7 +165,8 @@ function getBookmarks(){
                   dOption.attr('selected', 'selected');
                 }
                 dOptGroup.append(dOption);
-              } else if ( child.url == tabUrl ) {
+              } else if ( child.url == tabUrl || child.url.split('#')[0] == tabUrl.split('#')[0] ) {
+                //Check for hash differences, which Google doesn't do.
                 activeBookmark = child;
                 updateOnSave = true;
                 $('.save-btn').val('Update');
