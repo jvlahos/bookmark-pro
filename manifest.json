@@ -1,6 +1,8 @@
 {
   "name": "Bookmark Pro for Chrome",
   "version": "1.0",
+  "manifest_version": 2,
+  "author": "Jeff Vlahos",
   "description": "Save native bookmarks in Chrome faster.",
   "permissions": [
     "bookmarks",
@@ -12,21 +14,22 @@
       "default_icon": "icon.png",
       "default_popup": "popup.html"
   },
-  // "icons": { "16": "icon16.png",
-  //          "48": "icon48.png",
-  //         "128": "icon128.png"
-  // },
+  "chrome_ui_overrides": {
+    "bookmarks_ui": {
+      "remove_bookmark_shortcut": true,
+      "remove_button": true
+    }
+  },
   "commands": {
     "_execute_browser_action": {
       "suggested_key": {
-        "windows": "Ctrl+Shift+Y",
+        "windows": "Ctrl+Shift+D",
         "mac": "Command+D",
-        "chromeos": "Ctrl+Shift+U",
-        "linux": "Ctrl+Shift+J"
+        "chromeos": "Ctrl+Shift+D",
+        "linux": "Ctrl+Shift+D"
       }
     }
   },
-  "manifest_version": 2,
   "content_security_policy": "script-src 'self' https://ajax.googleapis.com https://cdnjs.cloudflare.com; object-src 'self'",
   "content_scripts": [
    {
@@ -35,5 +38,6 @@
      "run_at": "document_start",
      "all_frames": true
    }
- ]
+ ],
+ "short_name": "Bookmark Pro"
 }

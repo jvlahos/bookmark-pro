@@ -1,11 +1,22 @@
 
+var attempts = 0;
 
 function init() {
   getTabInfo();
   getBookmarks();
+  // if (tabUrl !== undefined) {
+  //   attempts = 3;
+  //   getBookmarks();
+  // } else if (attempts < 3) {
+  //   attempts++;
+  //   setTimeout(function(){
+  //     init();
+  //   }, 100);
+  // }
 }
 
 var tabTitle, tabUrl, favIconUrl;
+var newFolderOnSave = false;
 
 function getTabInfo() {
 
@@ -39,15 +50,32 @@ function getTabInfo() {
     var folderId = $(".js-select-folder").select2("val");
     tabTitle = $('.js-input-title').val();
     tabUrl = $('.js-input-url').val();
-    if (updateOnSave == false) {
-      chrome.bookmarks.create({'parentId': folderId, 'title': tabTitle, 'url': tabUrl });
-    } else if (updateOnSave == true) {
-      //Only title and url are supported for update function, so we'll delete then create
-      chrome.bookmarks.remove(activeBookmark.id, function(){
-        chrome.bookmarks.create({'parentId': folderId, 'title': tabTitle, 'url': tabUrl });
+    if (newFolderOnSave == true) {
+      var newFolderName = $('.js-input-new-folder').val();
+      chrome.bookmarks.create({'title': newFolderName, 'parentId': folderId},
+        function(newBookmarkFolder){
+          folderId = newBookmarkFolder.id;
+          if (updateOnSave == false) {
+            chrome.bookmarks.create({'parentId': folderId, 'title': tabTitle, 'url': tabUrl });
+          } else if (updateOnSave == true) {
+            //Only title and url are supported for update function, so we'll delete then create
+            chrome.bookmarks.remove(activeBookmark.id, function(){
+              chrome.bookmarks.create({'parentId': folderId, 'title': tabTitle, 'url': tabUrl });
+            });
+          }
       });
+    } else {
+      if (updateOnSave == false) {
+        chrome.bookmarks.create({'parentId': folderId, 'title': tabTitle, 'url': tabUrl });
+      } else if (updateOnSave == true) {
+        //Only title and url are supported for update function, so we'll delete then create
+        chrome.bookmarks.remove(activeBookmark.id, function(){
+          chrome.bookmarks.create({'parentId': folderId, 'title': tabTitle, 'url': tabUrl });
+        });
+      }
     }
     window.close();
+
   });
 
   $('.js-delete-btn').on('click', function(){
@@ -56,7 +84,13 @@ function getTabInfo() {
     });
   });
 
-  $(window).keydown(function (e){
+  $('.js-new-folder-btn').on('click', function(){
+    $('body').addClass('is-new-folder-mode');
+    newFolderOnSave = true;
+    $('.js-input-new-folder').trigger('focus');
+  });
+
+  $(document).keydown(function (e){
       if(e.keyCode == 13){
         if ($('.select2-container--focus').length > 0) {
           return;
@@ -64,7 +98,11 @@ function getTabInfo() {
           $('.js-save-btn').trigger('click');
         }
       } else if (e.keyCode == 27) {
-        window.close();
+        if (select2open == true) {
+          return;
+        } else {
+          window.close();
+        }
       } else if (e.keyCode == 9) {
         setTimeout(function(e){
           if ($('.select2-container--focus').length > 0) {
@@ -86,6 +124,7 @@ function getTabInfo() {
 
 }
 
+var select2open = false;
 var updateOnSave = false;
 var activeBookmark = false;
 
@@ -106,7 +145,7 @@ function getBookmarks(){
               var button = $('<button class="js-use-this-folder recent-folder-btn">');
               button.attr('data-id', parseInt(parent[0].id));
               button.text(parent[0].title);
-              $('.js-recent-folders').append(button);
+              $('.js-recent-folders').prepend(button);
             });
           }
         }
@@ -178,17 +217,25 @@ function getBookmarks(){
           }
         } //eo for loop bookmarkItems
 
+        var bookmarksBarOption = $('<option>');
+        bookmarksBarOption.attr('value', 1).text("Bookmarks Bar");
+
         $('.js-select-folder').prepend(optGroup);
+        $('.js-select-folder').prepend(bookmarksBarOption);
 
         $('.js-select-folder').select2({
           escapeMarkup: function (text) { return text; }
           })
           .on("select2:open", function () {
+            select2open = true;
            $('html, body').css('height', '365px');
            $('.select2-search__field').attr('placeholder', 'Search for a folder...');
           })
           .on("select2:close", function () {
            $('html, body').css('height', '190px');
+           setTimeout(function(){
+            select2open = false;
+           },100);
           });
 
         if (activeBookmark !== false) {

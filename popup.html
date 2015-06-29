@@ -3,11 +3,11 @@
   <!-- Roboto Webfont -->
   <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
   <!-- CSS -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-rc.1/css/select2.min.css" rel="stylesheet" />
+  <link href="/css/select2.min.css" rel="stylesheet" /><!--4.0.0-rc.1-->
   <link href="style.css" rel="stylesheet" />
   <!--Javascript-->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.0-rc.1/js/select2.min.js"></script>
+  <script src="js/jquery.min.js"></script> <!--1.10.2-->
+  <script src="js/select2.min.js"></script> <!--4.0.0-rc.1-->
   <script src="js/popup.js"></script>
 </head>
 <body class="popup-body">
@@ -23,7 +23,14 @@
     <div class="input-icon icon-folder"></div>
     <select class="js-select-folder"></select>
   </div>
-  <div class="recent-folders js-recent-folders"></div>
+  <div class="recent-folders js-recent-folders">
+    <!--Recently-modified folders appended here-->
+    <button class="new-folder-btn js-new-folder-btn">New Folder</button>
+  </div>
+  <div class="input-group input-group-new-folder">
+    <div class="input-icon icon-folder"></div>
+    <input class="js-input-new-folder input-new-folder" placeholder="Enter a new folder name..." type="text" value=""/>
+  </div>
   <!--Leave no whitespace between inline-block elements below-->
   <input class="save-btn js-save-btn" type="submit" value="Save"/><button class="delete-btn js-delete-btn"><span>+</span></button>
 </body>

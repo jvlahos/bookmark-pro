@@ -64,10 +64,22 @@ input:focus {
 
 .icon-folder {
   background-image: url('/img/icon-folder-gray-25-25.png');
+  position: relative;
 }
 
 .is-focused .icon-folder {
   background-image: url('/img/icon-folder-blue-25-25.png');
+}
+
+.is-new-folder-mode .select2-group .icon-folder:after {
+  background-color: #DDD;
+  content: "";
+  display: block;
+  height: 49px;
+  left: 7px;
+  position: absolute;
+  top: 20px;
+  width: 2px;
 }
 
 /*=============================================
@@ -145,7 +157,8 @@ input:focus {
   margin: 6px 0 8px 42px;
 }
 
-.recent-folder-btn {
+.recent-folder-btn,
+.new-folder-btn {
   outline: none; border: none;
   background-color: transparent;
   color: #AAA;
@@ -153,8 +166,22 @@ input:focus {
   margin-right: 8px;
 }
 
+
 .recent-folder-btn:hover {
   color: #2196F3;
+  cursor: pointer;
+}
+
+.new-folder-btn {
+  float: right;
+}
+
+.is-new-folder-mode .new-folder-btn {
+  display: none;
+}
+
+.new-folder-btn:hover {
+  color: #4CAF50;
   cursor: pointer;
 }
 
@@ -217,6 +244,37 @@ input:focus {
 .is-update-mode .delete-btn {
   display: inline-block;
 }
+
+.input-group-new-folder {
+  display: none;
+}
+
+.is-new-folder-mode .input-group-new-folder {
+  display: block;
+}
+
+.is-new-folder-mode .input-new-folder {
+  position: relative;
+  width: 275px;
+}
+
+.is-new-folder-mode .input-group-new-folder .icon-folder {
+  margin-left: 40px;
+  position: relative;
+}
+
+
+.is-new-folder-mode .input-group-new-folder .icon-folder:after {
+  content: "";
+  background-color: #DDD;
+  display: block;
+  left: -24px;
+  top: 8px;
+  position: absolute;
+  height: 2px;
+  width: 19px;
+}
+
 
 
 
