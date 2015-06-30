@@ -85,9 +85,17 @@ function getTabInfo() {
   });
 
   $('.js-new-folder-btn').on('click', function(){
-    $('body').addClass('is-new-folder-mode');
-    newFolderOnSave = true;
-    $('.js-input-new-folder').trigger('focus');
+    if (newFolderOnSave == false) {
+      $('body').addClass('is-new-folder-mode');
+      newFolderOnSave = true;
+      $(this).text('Cancel');
+      $('.js-input-new-folder').trigger('focus');
+    } else {
+      $('body').removeClass('is-new-folder-mode');
+      newFolderOnSave = false;
+      $(this).text('New Folder');
+      $('html, body').css('height', '190px');
+    }
   });
 
   $(document).keydown(function (e){

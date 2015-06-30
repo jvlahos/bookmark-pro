@@ -176,13 +176,17 @@ input:focus {
   float: right;
 }
 
-.is-new-folder-mode .new-folder-btn {
+/*.is-new-folder-mode .new-folder-btn {
   display: none;
-}
+}*/
 
 .new-folder-btn:hover {
   color: #4CAF50;
   cursor: pointer;
+}
+
+.is-new-folder-mode .new-folder-btn:hover {
+  color: #F44336;
 }
 
 .save-btn {
