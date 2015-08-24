@@ -140,7 +140,7 @@ function getBookmarks(){
 
   //Get recently-saved bookmarks in order to find recently-saved-to folders
   var recentParents = new Array();
-  chrome.bookmarks.getRecent(15, function(bookmarks){
+  chrome.bookmarks.getRecent(100, function(bookmarks){
     var i;
     var count = 0;
     for (i = 0; i < bookmarks.length; i++) {
