@@ -86,6 +86,11 @@ input:focus {
 =               Select2 Styles                =
 =============================================*/
 
+/*Before Select loads*/
+.js-select-folder {
+  max-width: 305px;
+}
+
 /*Select 2 Container*/
 .select2-container {
   width: 305px !important;
