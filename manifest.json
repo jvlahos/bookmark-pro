@@ -1,6 +1,6 @@
 {
   "name": "Bookmark Pro",
-  "version": "1.0",
+  "version": "1.0.1",
   "manifest_version": 2,
   "author": "Jeff Vlahos",
   "description": "Save native bookmarks in Chrome faster.",
@@ -21,10 +21,10 @@
   "commands": {
     "_execute_browser_action": {
       "suggested_key": {
-        "windows": "Ctrl+Shift+D",
+        "windows": "Ctrl+D",
         "mac": "Command+D",
-        "chromeos": "Ctrl+Shift+D",
-        "linux": "Ctrl+Shift+D"
+        "chromeos": "Ctrl+D",
+        "linux": "Ctrl+D"
       }
     }
   },
